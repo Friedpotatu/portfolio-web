@@ -8,15 +8,30 @@ interface Props {
 const {title} = Astro.props
 ---
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		
+		<!-- Script para prevenir flash de contenido sin estilo -->
+		<script is:inline>
+			function getThemePreference() {
+				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+					return localStorage.getItem('theme') || 'light';
+				}
+				return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			}
+			
+			const theme = getThemePreference();
+			if (theme === 'dark') {
+				document.documentElement.classList.add('dark');
+			}
+		</script>
 	</head>
-	<body class="bg-slate-900 min-h-screen pb-32">
+	<body class="bg-white dark:bg-neutral-900 text-gray-900 dark:text-white min-h-screen pb-32 transition-colors duration-300">
 		<slot />
 	</body>
 </html>
