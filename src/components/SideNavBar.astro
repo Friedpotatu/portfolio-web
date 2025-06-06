@@ -1,4 +1,8 @@
 ---
+import Home from "./icons/Home.astro"
+import Experience from "./icons/Experience.astro"
+import Projects from "./icons/Project.astro"
+import About from "./icons/About.astro"
 ---
 
 <nav class="side-navbar hidden sm:block fixed right-2 top-1/2 z-50 transform -translate-y-1/2">
@@ -7,77 +11,112 @@
     <!-- Presentación -->
     <a aria-label="Presentación" href="#home" class="nav-item group flex items-center py-3 px-2 rounded-xl transition-all duration-300 hover:px-1" data-section="home">
       <div class="icon-container flex items-center justify-center w-8 h-8">
-        <svg
-        class="w-5 h-5 text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          />
-        </svg>
+        <Home />
       </div>
     </a>
 
     <!-- Experiencia -->
     <a aria-label="Experiencia" href="#experience" class="nav-item group flex items-center py-3 px-2 rounded-xl transition-all duration-300 hover:px-1" data-section="experience">
       <div class="icon-container flex items-center justify-center w-8 h-8">
-        <svg
-          class="w-5 h-5 text-gray-800 dark:text-gray-200 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"
-          />
-        </svg>
+        <Experience />
       </div>
     </a>
 
     <!-- Proyectos -->
     <a aria-label="Proyectos" href="#projects" class="nav-item group flex items-center py-3 px-2 rounded-xl transition-all duration-300 hover:px-1" data-section="projects">
       <div class="icon-container flex items-center justify-center w-8 h-8">
-        <svg
-          class="w-5 h-5 text-gray-800 dark:text-gray-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-          />
-        </svg>
+        <Projects />
       </div>
     </a>
 
     <!-- Sobre mí -->
     <a aria-label="Sobre mí" href="#about" class="nav-item group flex items-center py-3 px-2 rounded-xl transition-all duration-300 hover:px-1" data-section="about">
       <div class="icon-container flex items-center justify-center w-8 h-8">
-        <svg
-          class="w-5 h-5 text-gray-800 dark:text-gray-200 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-          />
-        </svg>
+        <About />
       </div>
     </a>
   </div>
 </nav>
+
+<script>
+  // Configuración de colores para cada sección
+  const sectionColors: Record<string, { color: string; darkColor: string }> = {
+    home: { color: 'text-blue-600', darkColor: 'dark:text-blue-400' },
+    experience: { color: 'text-green-600', darkColor: 'dark:text-green-400' },
+    projects: { color: 'text-purple-600', darkColor: 'dark:text-purple-400' },
+    about: { color: 'text-orange-600', darkColor: 'dark:text-orange-400' }
+  };
+
+  // Función para actualizar el estado activo
+  function updateActiveSection(activeSection: string): void {
+    // Limpiar todos los iconos
+    document.querySelectorAll('.nav-item svg').forEach(svg => {
+      svg.classList.remove(
+        'text-blue-600', 'dark:text-blue-400',
+        'text-green-600', 'dark:text-green-400', 
+        'text-purple-600', 'dark:text-purple-400',
+        'text-orange-600', 'dark:text-orange-400'
+      );
+      svg.classList.add('text-gray-800', 'dark:text-gray-200');
+    });
+
+    // Aplicar color al icono activo
+    const activeNavItem = document.querySelector(`[data-section="${activeSection}"]`);
+    if (activeNavItem) {
+      const svg = activeNavItem.querySelector('svg');
+      if (svg && sectionColors[activeSection]) {
+        svg.classList.remove('text-gray-800', 'dark:text-gray-200');
+        svg.classList.add(sectionColors[activeSection].color, sectionColors[activeSection].darkColor);
+      }
+    }
+  }
+
+  // Configurar Intersection Observer
+  function setupSectionObserver(): void {
+    const sections = document.querySelectorAll('section[id]');
+    
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            updateActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        rootMargin: '-20% 0px -20% 0px',
+        threshold: 0.3
+      }
+    );
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', () => {
+    setupSectionObserver();
+    
+    // Establecer la sección inicial como activa
+    updateActiveSection('home');
+  });
+
+  // Manejar navegación manual
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const navItem = target.closest('.nav-item') as HTMLAnchorElement;
+    
+    if (navItem) {
+      const section = navItem.getAttribute('data-section');
+      if (section) {
+        // Pequeño delay para permitir que el scroll termine
+        setTimeout(() => {
+          updateActiveSection(section);
+        }, 100);
+      }
+    }
+  });
+</script>
