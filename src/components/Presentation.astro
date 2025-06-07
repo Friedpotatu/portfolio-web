@@ -1,8 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import profile from '../assets/profile.jpg';
+import Download from './icons/Download.astro';
+import More from './icons/More.astro';
+import GitHub from './icons/GitHub.astro';
+import LinkedIn from './icons/LinkedIn.astro';
 ---
-<div class="max-w-4xl mx-auto text-center px-4 py-48">
+<div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
     <div class="mb-8">
         <Image 
         src={profile}
@@ -19,16 +23,32 @@ import profile from '../assets/profile.jpg';
         <p class="text-lg text-gray-400 dark:text-gray-400 max-w-2xl mx-auto">
         <span class="font-semibold text-sky-600 dark:text-sky-400"> Web Developer </span>
         | <span class="font-semibold text-violet-600 dark:text-violet-400"> Full Stack Developer </span>
-        | <span class="font-semibold text-green-600 dark:text-green-400"> Python Lover </span>
+        | <span class="font-semibold text-green-600 dark:text-green-400"> Python Enthusiast </span>
         </p>
     </div>
 
-    <div class="flex gap-8 justify-center items-center">
-        <a href="#projects" class="px-2 py-1 border-2 border-orange-400 hover:border-orange-600 dark:border-orange-400 text-orange-400 hover:text-orange-600 dark:text-white dark:hover:text-orange-400 rounded-2xl font-medium transition-colors cursor-pointer">
+    <div class="flex flex-wrap gap-4 justify-center items-center mb-8">
+        <a aria-label="Ver proyectos" href="#projects" class="flex items-center gap-2 px-3 py-1 border-2 border-orange-400 hover:border-orange-600 dark:border-orange-400 text-orange-400 hover:text-orange-600 dark:text-white dark:hover:text-orange-400 rounded-2xl font-medium transition-colors cursor-pointer">
+            <!-- Project SVG -->
+            <More />
             Ver Proyectos
         </a>
-        <a href="#cv" class="px-2 py-1 border-2 border-blue-400 dark:border-blue-400 text-blue-400 dark:text-white hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-2xl font-medium transition-colors cursor-pointer">
+        <a href="#cv" class="flex items-center gap-2 px-3 py-1 border-2 border-blue-400 dark:border-blue-400 text-blue-400 dark:text-white hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-2xl font-medium transition-colors cursor-pointer">
+            <!-- Download SVG -->
+            <Download />
             Descargar CV
+        </a>
+    </div>
+
+    <!-- Redes sociales -->
+    <div class="flex gap-6 justify-center items-center text-gray-600 dark:text-gray-300">
+        <a href="https://github.com/friedpotatu" target="_blank" class="hover:text-black dark:hover:text-white transition-colors">
+            <!-- GitHub -->
+            <GitHub />
+        </a>
+        <a href="https://www.linkedin.com/in/nicolas-pavez-pavez/" target="_blank" class="hover:text-blue-700 transition-colors">
+            <!-- LinkedIn -->
+            <LinkedIn />
         </a>
     </div>
 </div>
