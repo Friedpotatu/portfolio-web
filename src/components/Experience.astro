@@ -1,121 +1,129 @@
 ---
+import { getCollection, render } from 'astro:content';
 
+// Obtener todas las experiencias y ordenarlas
+const experiences = await getCollection('experience');
+const sortedExperiences = experiences.sort((a, b) => a.data.order - b.data.order);
+
+// Renderizar el contenido de cada experiencia
+const renderedExperiences = await Promise.all(
+    sortedExperiences.map(async (experience) => {
+        const { Content } = await render(experience);
+        return {
+            ...experience,
+            Content
+        };
+    })
+);
+
+// Función para obtener el color de la tecnología
+function getTechColor(tech: string): string {
+    const techColors: Record<string, string> = {
+        'Laravel 12': 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200',
+        'Laravel 8': 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200',
+        'Bootstrap 5': 'bg-violet-100 dark:bg-violet-900 text-violet-800 dark:text-violet-200',
+        'Tailwind CSS': 'bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200',
+        'MariaDB': 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200',
+        'Django': 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
+        'Random Forest': 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200',
+        'SQLite': 'bg-cyan-100 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200',
+        'SQL Anywhere': 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200',
+        'Python': 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
+        'Livewire': 'bg-violet-100 dark:bg-violet-900 text-violet-800 dark:text-violet-200',
+        'Blade': 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200',
+        'PowerBuilder': 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200',
+        'Notion': 'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200',
+        'Scikit-learn': 'bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200',
+        'Pandas': 'bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200',
+        'Matplotlib': 'bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-200'
+    };
+    
+    return techColors[tech] || 'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200';
+}
+
+// Función para formatear fechas
+function formatDate(dateString: string): string {
+    const months = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    
+    const [year, month] = dateString.split('-');
+    return `${months[parseInt(month) - 1]} ${year}`;
+}
+
+// Función para crear el rango de fechas
+function getDateRange(startDate: string, endDate?: string, current?: boolean): string {
+    const start = formatDate(startDate);
+    
+    if (current) {
+        return `${start} - Presente`;
+    }
+    
+    if (endDate) {
+        const end = formatDate(endDate);
+        return `${start} - ${end}`;
+    }
+    
+    return start;
+}
 ---
+
 <div class="max-w-4xl mx-auto">
     <h2 class="text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-16">
         Experiencia
     </h2>
 
-    <div class="space-y-2">
-        <!-- Experiencia 1 -->
-        <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-gray-200 dark:border-neutral-700">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                <div>
-                    <h3 class="text-2xl font-semibold text-black dark:text-white">
-                        Ingeniero de Soporte TI
-                    </h3>
-                    <p class="text-lg text-blue-600 dark:text-blue-400">
-                        Volta Ingeniería Eléctrica Spa
-                    </p>
+    <div class="space-y-8">
+        {renderedExperiences.map((experience) => (
+            <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-gray-200 dark:border-neutral-700">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-black dark:text-white">
+                            {experience.data.title}
+                        </h3>
+                        <p class="text-lg text-blue-600 dark:text-blue-400">
+                            {experience.data.company}
+                        </p>
+                        {experience.data.location && (
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                {experience.data.location}
+                            </p>
+                        )}
+                    </div>
+                    <span class="text-gray-500 dark:text-gray-400 font-medium mt-2 md:mt-0">
+                        {getDateRange(experience.data.startDate, experience.data.endDate, experience.data.current)}
+                    </span>
                 </div>
-                <span class="text-gray-500 dark:text-gray-400 font-medium">
-                    Marzo 2025 - Presente
-                </span>
-            </div>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Lideré el desarrollo de una intranet web interna
-                para la gestión de activos tecnológicos, orientada a optimizar procesos y mejorar la
-                trazabilidad del inventario TI de la empresa.
-            </p>
-            <span class="text-gray-600 dark:text-gray-400 font-bold block mt-2">
-                Aspectos destacados del desarrollo:
-            </span>
-            <ul class="list-disc pl-5 text-gray-600 dark:text-gray-300 leading-relaxed mt-2">
-                <li>Implementación de un sistema web completo utilizando Laravel, Livewire y Blade.</li>
-                <li>Gestión de activos TI: registro, seguimiento por sede/usuario, asignaciones individuales y por área.</li>
-                <li>Dashboard interactivo con métricas clave y visualización de estados.</li>
-                <li>Exportación a Excel y generación automática de actas de entrega/devolución.</li>
-                <li>Administración centralizada de categorías, sedes, cargos y usuarios.</li>
-                <li>Control de accesos y permisos para usuarios y administradores.</li>
-            </ul>
-            <div class="flex flex-wrap gap-2 mt-4">
-                <span class="px-3 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full text-sm">Laravel 12</span>
-                <span class="px-3 py-1 bg-violet-100 dark:bg-violet-900 text-violet-800 dark:text-violet-200 rounded-full text-sm">Bootstrap 5</span>
-                <span class="px-3 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm">MariaDB</span>
-            </div>
-        </div>
 
-        <!-- Experiencia 2 -->
-        <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-gray-200 dark:border-neutral-700">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                <div>
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">
-                        Analista de Datos - Exámen de Título
-                    </h3>
-                    <p class="text-lg text-blue-600 dark:text-blue-400">
-                        Minera Antucoya
-                    </p>
+                {/* Descripción principal del markdown */}
+                <div class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 prose prose-sm dark:prose-invert max-w-none">
+                    <experience.Content />
                 </div>
-                <span class="text-gray-500 dark:text-gray-400 font-medium">
-                    Agosto 2024 - Diciembre 2024
-                </span>
-            </div>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Desarrollé una plataforma web como parte de un sistema predictivo enfocado en la gestión de Seguridad y Salud Ocupacional, utilizando tecnologías como Django, SQLite y Python.
-            </p>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mt-2">
-                Integré un modelo de Machine Learning que analiza datos históricos de incidentes para anticipar eventos de riesgo en fechas críticas del año. La solución proporciona visualizaciones y métricas clave para la toma de decisiones preventivas, combinando análisis estadístico con desarrollo web orientado a la trazabilidad y gestión de alertas.
-            </p>
-            <span class="text-gray-600 dark:text-gray-400 font-bold block mt-2">
-                Aspectos destacados del desarrollo:
-            </span>
-            <ul class="list-disc pl-5 text-gray-600 dark:text-gray-300 leading-relaxed mt-2">
-                <li>Implementación de un panel web con Django para visualizar predicciones y datos clave.</li>
-                <li>Integración de un modelo de machine learning (Random Forest) entrenado sobre registros históricos de incidentes.</li>
-                <li>Visualización de datos mediante gráficos integrados en la interfaz</li>
-            </ul>
-            <div class="flex flex-wrap gap-2 mt-4">
-                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Django</span>
-                <span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-sm">Random Forest</span>
-                <span class="px-3 py-1 bg-cyan-100 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200 rounded-full text-sm">SQLite</span>
-            </div>
-        </div>
-        <!-- Experiencia 3 -->
-        <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-gray-200 dark:border-neutral-700">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                <div>
-                    <h3 class="text-2xl font-semibold text-black dark:text-white">
-                        QA Tester & Full Stack Developer - Intern
-                    </h3>
-                    <p class="text-lg text-blue-600 dark:text-blue-400">
-                        Reliper S.A
-                    </p>
+
+                {/* Aspectos destacados */}
+                {experience.data.highlights && experience.data.highlights.length > 0 && (
+                    <div class="mb-4">
+                        <span class="text-gray-600 dark:text-gray-400 font-bold block mb-2">
+                            Aspectos destacados:
+                        </span>
+                        <ul class="list-disc pl-5 text-gray-600 dark:text-gray-300 leading-relaxed space-y-1">
+                            {experience.data.highlights.map((highlight) => (
+                                <li>{highlight}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {/* Tecnologías */}
+                <div class="flex flex-wrap gap-2">
+                    {experience.data.technologies.map((tech) => (
+                        <span class={`px-3 py-1 rounded-full text-sm ${getTechColor(tech)}`}>
+                            {tech}
+                        </span>
+                    ))}
                 </div>
-                <span class="text-gray-500 dark:text-gray-400 font-medium">
-                    Enero 2024 - Marzo 2024
-                </span>
             </div>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Colaboré en el proceso de migración del sistema ERP, documentando errores críticos mediante la herramienta Notion.
-                Además, desarrollé un sistema web para la gestión de activos fijos, incorporando funcionalidades como CRUD básico y
-                escáner QR. Me desempeñé como desarrollador full-stack, utilizando Laravel, SQL Anywhere (Sybase) y PowerBuilder,
-                contribuyendo al control y trazabilidad del inventario de activos a nivel organizacional. El sistema utilizó dos
-                bases de datos: MariaDB para la gestión de usuarios (credenciales y autenticación) y SQL Anywhere para el manejo de
-                la información principal del sistema.
-            </p>
-            <span class="text-gray-600 dark:text-gray-400 font-bold block mt-2">
-                Aspectos destacados del desarrollo:
-            </span>
-            <ul class="list-disc pl-5 text-gray-600 dark:text-gray-300 leading-relaxed mt-2">
-                <li>Desarrollo de un sistema web completo con Laravel, Tailwind CSS y Blade.</li>
-                <li>Gestión integral de activos TI: registro, seguimiento por sede y usuario, y asignaciones individuales o por área.</li>
-                <li>Integración de dos motores de base de datos: MariaDB (usuarios) y SQL Anywhere (datos operacionales).</li>
-            </ul>
-            <div class="flex flex-wrap gap-2 mt-4">
-                <span class="px-3 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full text-sm">Laravel 8</span>
-                <span class="px-3 py-1 bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200 rounded-full text-sm">Tailwind CSS</span>
-                <span class="px-3 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm">SQL Anywhere</span>
-            </div>
-        </div>
+        ))}
     </div>
 </div>
