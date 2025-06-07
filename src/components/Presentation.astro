@@ -29,12 +29,15 @@ import LinkedIn from './icons/LinkedIn.astro';
 
     <div class="flex flex-wrap gap-4 justify-center items-center mb-8">
         <a aria-label="Ver proyectos" href="#projects" class="flex items-center gap-2 px-3 py-1 border-2 border-orange-400 hover:border-orange-600 dark:border-orange-400 text-orange-400 hover:text-orange-600 dark:text-white dark:hover:text-orange-400 rounded-2xl font-medium transition-colors cursor-pointer">
-            <!-- Project SVG -->
             <More />
             Ver Proyectos
         </a>
-        <a href="#cv" class="flex items-center gap-2 px-3 py-1 border-2 border-blue-400 dark:border-blue-400 text-blue-400 dark:text-white hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-2xl font-medium transition-colors cursor-pointer">
-            <!-- Download SVG -->
+        <a 
+            href="/cv.pdf" 
+            download="Nicolas_Pavez_CV_2025.pdf"
+            aria-label="Descargar CV"
+            class="flex items-center gap-2 px-3 py-1 border-2 border-blue-400 dark:border-blue-400 text-blue-400 dark:text-white hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-2xl font-medium transition-colors cursor-pointer"
+        >
             <Download />
             Descargar CV
         </a>
@@ -43,11 +46,9 @@ import LinkedIn from './icons/LinkedIn.astro';
     <!-- Redes sociales -->
     <div class="flex gap-6 justify-center items-center text-gray-600 dark:text-gray-300">
         <a href="https://github.com/friedpotatu" target="_blank" class="hover:text-black dark:hover:text-white transition-colors">
-            <!-- GitHub -->
             <GitHub />
         </a>
         <a href="https://www.linkedin.com/in/nicolas-pavez-pavez/" target="_blank" class="hover:text-blue-700 transition-colors">
-            <!-- LinkedIn -->
             <LinkedIn />
         </a>
     </div>
