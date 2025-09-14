@@ -58,36 +58,56 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
 </div>
 
 <!-- Modal para vista ampliada -->
-<div id={`gallery-modal-${galleryId}`} class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4 overflow-auto">
-    <div class="relative w-full h-full flex items-center justify-center">
-        <button 
-            id={`close-modal-${galleryId}`}
-            class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
-            aria-label="Cerrar galería"
-        >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
+<div id={`gallery-modal-${galleryId}`} class="fixed inset-0 bg-black/90 z-50 hidden">
+    <div class="absolute inset-0 flex flex-col">
+        <!-- Header con botón cerrar -->
+        <div class="flex justify-end p-4 z-10">
+            <button 
+                id={`close-modal-${galleryId}`}
+                class="text-white hover:text-gray-300 transition-colors bg-black/50 rounded-full p-2"
+                aria-label="Cerrar galería"
+            >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
         
-        <div class="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
-            <img 
-                id={`modal-image-${galleryId}`}
-                src=""
-                alt=""
-                class="max-w-full max-h-full object-contain rounded-lg"
-                style="display: none;"
-            />
-            <video 
-                id={`modal-video-${galleryId}`}
-                src=""
-                controls
-                autoplay
-                muted
-                loop
-                class="max-w-full max-h-full object-contain rounded-lg"
-                style="display: none;"
-            />
+        <!-- Contenedor principal de imagen/video -->
+        <div class="flex-1 flex items-center justify-center px-4 pb-20 min-h-0">
+            <div class="relative w-full h-full flex items-center justify-center">
+            <!-- Pre-render all images using Image component for better performance -->
+            {images.map((image, index) => (
+                !image.src.endsWith('.mkv') && !image.src.endsWith('.mp4') && !image.src.endsWith('.webm') ? (
+                    <Image
+                        id={`modal-image-${galleryId}-${index}`}
+                        src={image.src}
+                        alt={image.alt}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                        style="display: none;"
+                        width={1200}
+                        height={800}
+                    />
+                ) : null
+            ))}
+            
+            <!-- Pre-render all videos -->
+            {images.map((image, index) => (
+                image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm') ? (
+                    <video 
+                        id={`modal-video-${galleryId}-${index}`}
+                        src={image.src}
+                        controls
+                        autoplay
+                        muted
+                        loop
+                        class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                        style="display: none;"
+                    />
+                ) : null
+            ))}
+            </div>
         </div>
         
         <!-- Navegación -->
@@ -112,7 +132,7 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
         </button>
         
         <!-- Caption y contador -->
-        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-center bg-black/50 rounded-lg px-4 py-2">
             <p id={`modal-caption-${galleryId}`} class="text-white text-sm mb-1"></p>
             <p class="text-gray-300 text-xs">
                 <span id={`current-index-${galleryId}`}>1</span> de <span id={`total-images-${galleryId}`}>{images.length}</span>
@@ -130,8 +150,6 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
         
         // Elementos del DOM con IDs únicos
         const modal = document.getElementById(`gallery-modal-${galleryId}`);
-        const modalImage = document.getElementById(`modal-image-${galleryId}`);
-        const modalVideo = document.getElementById(`modal-video-${galleryId}`);
         const modalCaption = document.getElementById(`modal-caption-${galleryId}`);
         const currentIndexEl = document.getElementById(`current-index-${galleryId}`);
         const closeBtn = document.getElementById(`close-modal-${galleryId}`);
@@ -140,7 +158,7 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
         const galleryItems = document.querySelectorAll(`[data-gallery-id="${galleryId}"]`);
         
         // Verificar que los elementos existan
-        if (!modal || !modalImage || !modalVideo || !modalCaption || !currentIndexEl) {
+        if (!modal || !modalCaption || !currentIndexEl) {
             return; // Si no existen los elementos, no inicializar
         }
         
@@ -164,10 +182,14 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
         
         // Función para cerrar modal
         function closeModal() {
-            if (modalVideo) {
-                modalVideo.pause();
-                modalVideo.currentTime = 0;
-            }
+            // Pausar todos los videos
+            images.forEach((_, index) => {
+                const video = document.getElementById(`modal-video-${galleryId}-${index}`);
+                if (video) {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
             
             modal.classList.add('hidden');
             modal.classList.remove('flex');
@@ -181,30 +203,36 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
             const image = images[currentIndex];
             if (!image) return;
             
+            // Ocultar todos los elementos primero
+            images.forEach((_, index) => {
+                const img = document.getElementById(`modal-image-${galleryId}-${index}`);
+                const video = document.getElementById(`modal-video-${galleryId}-${index}`);
+                
+                if (img) img.style.display = 'none';
+                if (video) {
+                    video.style.display = 'none';
+                    video.pause();
+                }
+            });
+            
             const isVideo = image.src && (image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm'));
             
             if (isVideo) {
-                // Ocultar imagen y configurar video
-                modalImage.style.display = 'none';
-                modalVideo.src = image.src;
-                modalVideo.style.display = 'block';
-                modalVideo.load();
-                
-                // Reproducir cuando esté listo
-                modalVideo.onloadeddata = function() {
-                    modalVideo.play().catch(() => {
+                // Mostrar video específico
+                const currentVideo = document.getElementById(`modal-video-${galleryId}-${currentIndex}`);
+                if (currentVideo) {
+                    currentVideo.style.display = 'block';
+                    currentVideo.currentTime = 0;
+                    currentVideo.play().catch(() => {
                         // Error silencioso si no puede reproducir
                     });
-                    modalVideo.onloadeddata = null; // Limpiar el handler
-                };
+                }
             } else {
-                // Ocultar video y configurar imagen
-                modalVideo.style.display = 'none';
-                modalVideo.pause();
-                modalVideo.src = '';
-                modalImage.src = image.src;
-                modalImage.alt = image.alt || '';
-                modalImage.style.display = 'block';
+                // Mostrar imagen específica
+                const currentImage = document.getElementById(`modal-image-${galleryId}-${currentIndex}`);
+                if (currentImage) {
+                    currentImage.style.display = 'block';
+                }
             }
             
             // Actualizar caption y contador
