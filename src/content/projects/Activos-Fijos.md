@@ -4,6 +4,10 @@ description: "Sistema de gestión de activos fijos con código QR y visualizaci�
 image: "/src/assets/Project3.jpg"
 technologies: ["Laravel 8", "Tailwind CSS", "SQL Anywhere", "D3.js", "Python", "FastAPI"]
 gallery: true
+galleryImages:
+  - src: "/src/assets/Project3.jpg"
+    alt: "Dashboard del sistema de activos fijos"
+    caption: "Vista principal del sistema de gestión de activos con código QR"
 order: 3
 ---
 
