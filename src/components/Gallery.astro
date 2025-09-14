@@ -12,6 +12,9 @@ interface Props {
 }
 
 const { images, projectTitle } = Astro.props;
+
+// Generar un ID único para este componente de galería
+const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
 ---
 
 <div class="gallery-container max-w-6xl mx-auto p-4">
@@ -19,6 +22,7 @@ const { images, projectTitle } = Astro.props;
         {images.map((image, index) => (
             <div 
                 class="gallery-item cursor-pointer group"
+                data-gallery-id={galleryId}
                 data-index={index}
             >
                 <div class="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 aspect-video">
@@ -32,11 +36,13 @@ const { images, projectTitle } = Astro.props;
                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                     ) : (
-                        <img
+                        <Image
                             src={image.src}
                             alt={image.alt}
                             loading="lazy"
                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            width={400}
+                            height={300}
                         />
                     )}
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
@@ -52,160 +58,227 @@ const { images, projectTitle } = Astro.props;
 </div>
 
 <!-- Modal para vista ampliada -->
-<div id="gallery-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4">
-    <div class="relative max-w-4xl max-h-[90vh] w-full">
+<div id={`gallery-modal-${galleryId}`} class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4 overflow-auto">
+    <div class="relative w-full h-full flex items-center justify-center">
         <button 
-            id="close-modal"
-            class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+            id={`close-modal-${galleryId}`}
+            class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
             aria-label="Cerrar galería"
         >
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
         
-        <div class="relative">
+        <div class="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
             <img 
-                id="modal-image"
+                id={`modal-image-${galleryId}`}
                 src=""
                 alt=""
-                class="w-full h-full object-contain rounded-lg"
+                class="max-w-full max-h-full object-contain rounded-lg"
                 style="display: none;"
             />
             <video 
-                id="modal-video"
+                id={`modal-video-${galleryId}`}
                 src=""
                 controls
                 autoplay
                 muted
                 loop
-                class="w-full h-full object-contain rounded-lg"
+                class="max-w-full max-h-full object-contain rounded-lg"
                 style="display: none;"
             />
-            
-            <!-- Navegación -->
-            <button 
-                id="prev-btn"
-                class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                aria-label="Imagen anterior"
-            >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            
-            <button 
-                id="next-btn"
-                class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                aria-label="Siguiente imagen"
-            >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
         </div>
         
-        <div class="mt-4 text-center">
-            <p id="modal-caption" class="text-white text-sm"></p>
-            <p class="text-gray-300 text-xs mt-1">
-                <span id="current-index">1</span> de <span id="total-images">{images.length}</span>
+        <!-- Navegación -->
+        <button 
+            id={`prev-btn-${galleryId}`}
+            class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors"
+            aria-label="Imagen anterior"
+        >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        
+        <button 
+            id={`next-btn-${galleryId}`}
+            class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors"
+            aria-label="Siguiente imagen"
+        >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        
+        <!-- Caption y contador -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
+            <p id={`modal-caption-${galleryId}`} class="text-white text-sm mb-1"></p>
+            <p class="text-gray-300 text-xs">
+                <span id={`current-index-${galleryId}`}>1</span> de <span id={`total-images-${galleryId}`}>{images.length}</span>
             </p>
         </div>
     </div>
 </div>
 
 <script define:vars={{ images, projectTitle }}>
-    let currentIndex = 0;
-    
-    // Elementos del DOM
-    const modal = document.getElementById('gallery-modal');
-    const modalImage = document.getElementById('modal-image');
-    const modalVideo = document.getElementById('modal-video');
-    const modalCaption = document.getElementById('modal-caption');
-    const currentIndexEl = document.getElementById('current-index');
-    const closeBtn = document.getElementById('close-modal');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    
-    // Función para abrir modal
-    function openModal(index) {
-        currentIndex = index;
-        updateModalContent();
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-    }
-    
-    // Función para cerrar modal
-    function closeModal() {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        document.body.style.overflow = '';
-    }
-    
-    // Función para actualizar contenido del modal
-    function updateModalContent() {
-        const image = images[currentIndex];
-        const isVideo = image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm');
+    function initializeGallery() {
+        let currentIndex = 0;
         
-        if (isVideo) {
-            modalImage.style.display = 'none';
-            modalVideo.style.display = 'block';
-            modalVideo.src = image.src;
-        } else {
-            modalVideo.style.display = 'none';
-            modalImage.style.display = 'block';
-            modalImage.src = image.src;
-            modalImage.alt = image.alt;
+        // Generar ID único para esta instancia
+        const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        
+        // Elementos del DOM con IDs únicos
+        const modal = document.getElementById(`gallery-modal-${galleryId}`);
+        const modalImage = document.getElementById(`modal-image-${galleryId}`);
+        const modalVideo = document.getElementById(`modal-video-${galleryId}`);
+        const modalCaption = document.getElementById(`modal-caption-${galleryId}`);
+        const currentIndexEl = document.getElementById(`current-index-${galleryId}`);
+        const closeBtn = document.getElementById(`close-modal-${galleryId}`);
+        const prevBtn = document.getElementById(`prev-btn-${galleryId}`);
+        const nextBtn = document.getElementById(`next-btn-${galleryId}`);
+        const galleryItems = document.querySelectorAll(`[data-gallery-id="${galleryId}"]`);
+        
+        // Verificar que los elementos existan
+        if (!modal || !modalImage || !modalVideo || !modalCaption || !currentIndexEl) {
+            return; // Si no existen los elementos, no inicializar
         }
         
-        modalCaption.textContent = image.caption || '';
-        currentIndexEl.textContent = (currentIndex + 1).toString();
-    }
-    
-    // Función para ir a la siguiente imagen
-    function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        updateModalContent();
-    }
-    
-    // Función para ir a la imagen anterior
-    function prevImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        updateModalContent();
-    }
-    
-    // Event listeners
-    galleryItems.forEach((item, index) => {
-        item.addEventListener('click', () => openModal(index));
-    });
-    
-    closeBtn.addEventListener('click', closeModal);
-    nextBtn.addEventListener('click', nextImage);
-    prevBtn.addEventListener('click', prevImage);
-    
-    // Cerrar modal al hacer clic fuera de la imagen
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-    
-    // Navegación con teclado
-    document.addEventListener('keydown', (e) => {
-        if (!modal.classList.contains('hidden')) {
-            switch (e.key) {
-                case 'Escape':
-                    closeModal();
-                    break;
-                case 'ArrowLeft':
-                    prevImage();
-                    break;
-                case 'ArrowRight':
-                    nextImage();
-                    break;
+        // Función para abrir modal
+        function openModal(index) {
+            currentIndex = index;
+            updateModalContent();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            
+            // Mostrar/ocultar botones de navegación
+            if (images.length <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            } else {
+                if (prevBtn) prevBtn.style.display = 'block';
+                if (nextBtn) nextBtn.style.display = 'block';
             }
         }
-    });
+        
+        // Función para cerrar modal
+        function closeModal() {
+            if (modalVideo) {
+                modalVideo.pause();
+                modalVideo.currentTime = 0;
+            }
+            
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+        
+        // Función para actualizar contenido del modal
+        function updateModalContent() {
+            if (!images || images.length === 0) return;
+            
+            const image = images[currentIndex];
+            if (!image) return;
+            
+            const isVideo = image.src && (image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm'));
+            
+            if (isVideo) {
+                // Ocultar imagen y configurar video
+                modalImage.style.display = 'none';
+                modalVideo.src = image.src;
+                modalVideo.style.display = 'block';
+                modalVideo.load();
+                
+                // Reproducir cuando esté listo
+                modalVideo.onloadeddata = function() {
+                    modalVideo.play().catch(() => {
+                        // Error silencioso si no puede reproducir
+                    });
+                    modalVideo.onloadeddata = null; // Limpiar el handler
+                };
+            } else {
+                // Ocultar video y configurar imagen
+                modalVideo.style.display = 'none';
+                modalVideo.pause();
+                modalVideo.src = '';
+                modalImage.src = image.src;
+                modalImage.alt = image.alt || '';
+                modalImage.style.display = 'block';
+            }
+            
+            // Actualizar caption y contador
+            modalCaption.textContent = image.caption || '';
+            currentIndexEl.textContent = (currentIndex + 1).toString();
+        }
+        
+        // Función para ir a la siguiente imagen
+        function nextImage() {
+            if (images.length <= 1) return; // No navegar si solo hay una imagen
+            currentIndex = (currentIndex + 1) % images.length;
+            updateModalContent();
+        }
+        
+        // Función para ir a la imagen anterior
+        function prevImage() {
+            if (images.length <= 1) return; // No navegar si solo hay una imagen
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateModalContent();
+        }
+        
+        // Event listeners
+        if (galleryItems) {
+            galleryItems.forEach((item, index) => {
+                if (item) {
+                    item.addEventListener('click', () => openModal(index));
+                }
+            });
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextImage);
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevImage);
+        }
+        
+        // Cerrar modal al hacer clic fuera de la imagen
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+        
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (modal && !modal.classList.contains('hidden')) {
+                switch (e.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        prevImage();
+                        break;
+                    case 'ArrowRight':
+                        nextImage();
+                        break;
+                }
+            }
+        });
+    }
+    
+    // Inicializar cuando la página se carga o cuando Astro navega
+    document.addEventListener('astro:page-load', initializeGallery);
+    
+    // Inicializar inmediatamente si el DOM ya está listo
+    if (document.readyState !== 'loading') {
+        initializeGallery();
+    } else {
+        document.addEventListener('DOMContentLoaded', initializeGallery);
+    }
 </script>
