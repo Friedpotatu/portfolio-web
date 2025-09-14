@@ -3,6 +3,7 @@ title: "Sistema de Activos Fijos"
 description: "Sistema de gestión de activos fijos con código QR y visualización interactiva."
 image: "/src/assets/Project3.jpg"
 technologies: ["Laravel 8", "Tailwind CSS", "SQL Anywhere", "D3.js", "Python", "FastAPI"]
+gallery: true
 order: 3
 ---
 
