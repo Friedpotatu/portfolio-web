@@ -12,6 +12,11 @@ const projects = defineCollection({
         github: z.string().url().optional(),
         demo: z.string().url().optional(),
         gallery: z.boolean().default(false),
+        galleryImages: z.array(z.object({
+            src: z.string(),
+            alt: z.string(),
+            caption: z.string().optional()
+        })).optional(),
         featured: z.boolean().default(false),
         order: z.number().default(0)
     })
