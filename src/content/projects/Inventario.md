@@ -1,11 +1,11 @@
 ---
 title: "Sistema de Inventario TI"
 description: "Sistema de gestión de inventario y activos TI desarrollado con Laravel."
-image: "/inventory-gif.gif"
+image: "/inventory-video.mkv"
 technologies: ["Laravel 12", "Bootstrap 5", "MariaDB", "Livewire", "Blade"]
 gallery: true
 galleryImages:
-  - src: "/inventory-gif.gif"
+  - src: "/inventory-video.mkv"
     alt: "Dashboard y navegación del sistema"
     caption: "Vista del dashboard principal y navegación básica entre secciones"
 featured: true

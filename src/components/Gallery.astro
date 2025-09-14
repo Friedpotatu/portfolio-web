@@ -22,12 +22,23 @@ const { images, projectTitle } = Astro.props;
                 data-index={index}
             >
                 <div class="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 aspect-video">
-                    <img
-                        src={image.src}
-                        alt={image.alt}
-                        loading="lazy"
-                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+                    {image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm') ? (
+                        <video
+                            src={image.src}
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                    ) : (
+                        <img
+                            src={image.src}
+                            alt={image.alt}
+                            loading="lazy"
+                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                    )}
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
                 </div>
                 {image.caption && (
@@ -59,6 +70,17 @@ const { images, projectTitle } = Astro.props;
                 src=""
                 alt=""
                 class="w-full h-full object-contain rounded-lg"
+                style="display: none;"
+            />
+            <video 
+                id="modal-video"
+                src=""
+                controls
+                autoplay
+                muted
+                loop
+                class="w-full h-full object-contain rounded-lg"
+                style="display: none;"
             />
             
             <!-- Navegación -->
@@ -98,6 +120,7 @@ const { images, projectTitle } = Astro.props;
     // Elementos del DOM
     const modal = document.getElementById('gallery-modal');
     const modalImage = document.getElementById('modal-image');
+    const modalVideo = document.getElementById('modal-video');
     const modalCaption = document.getElementById('modal-caption');
     const currentIndexEl = document.getElementById('current-index');
     const closeBtn = document.getElementById('close-modal');
@@ -124,8 +147,19 @@ const { images, projectTitle } = Astro.props;
     // Función para actualizar contenido del modal
     function updateModalContent() {
         const image = images[currentIndex];
-        modalImage.src = image.src;
-        modalImage.alt = image.alt;
+        const isVideo = image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm');
+        
+        if (isVideo) {
+            modalImage.style.display = 'none';
+            modalVideo.style.display = 'block';
+            modalVideo.src = image.src;
+        } else {
+            modalVideo.style.display = 'none';
+            modalImage.style.display = 'block';
+            modalImage.src = image.src;
+            modalImage.alt = image.alt;
+        }
+        
         modalCaption.textContent = image.caption || '';
         currentIndexEl.textContent = (currentIndex + 1).toString();
     }
