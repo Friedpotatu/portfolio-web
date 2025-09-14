@@ -26,57 +26,50 @@
   </button>
 </div>
 
-<script>
-  type Theme = 'light' | 'dark';
-
-  // Función para obtener el tema preferido
-  function getThemePreference(): Theme {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      return (localStorage.getItem('theme') as Theme) || 'light';
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-
-  // Función para aplicar el tema
-  function applyTheme(theme: Theme): void {
-    const root = document.documentElement;
+<script is:inline>
+  // Función para aplicar tema
+  function applyTheme() {
+    const theme = localStorage.getItem('theme');
     const sunIcon = document.getElementById('sun-icon');
     const moonIcon = document.getElementById('moon-icon');
-
+    
     if (theme === 'dark') {
-      root.classList.add('dark');
+      document.documentElement.classList.add('dark');
       sunIcon?.classList.add('hidden');
       moonIcon?.classList.remove('hidden');
     } else {
-      root.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
       sunIcon?.classList.remove('hidden');
       moonIcon?.classList.add('hidden');
     }
-
-    localStorage.setItem('theme', theme);
   }
 
-  // Función para alternar el tema
-  function toggleTheme(): void {
-    const currentTheme = getThemePreference();
-    const newTheme: Theme = currentTheme === 'dark' ? 'light' : 'dark';
-    applyTheme(newTheme);
-  }
+  // Aplicar tema en carga inicial
+  applyTheme();
 
-  // Inicializar tema al cargar la página
-  document.addEventListener('DOMContentLoaded', () => {
-    const theme = getThemePreference();
-    applyTheme(theme);
-
-    // Agregar event listener al botón
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle?.addEventListener('click', toggleTheme);
+  // Aplicar tema antes de view transitions para evitar flash
+  document.addEventListener('astro:before-swap', (event) => {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      event.newDocument.documentElement.classList.add('dark');
+    } else {
+      event.newDocument.documentElement.classList.remove('dark');
+    }
   });
 
-  // Escuchar cambios en las preferencias del sistema
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e: MediaQueryListEvent) => {
-    if (!localStorage.getItem('theme')) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
+  // Aplicar tema después de view transitions para actualizar iconos
+  document.addEventListener('astro:after-swap', applyTheme);
+
+  // Función para alternar tema
+  function toggleTheme() {
+    const currentTheme = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', currentTheme);
+    applyTheme();
+  }
+
+  // Agregar event listener al botón
+  document.addEventListener('astro:page-load', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle?.addEventListener('click', toggleTheme);
   });
 </script>
