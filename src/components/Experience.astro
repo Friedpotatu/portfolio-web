@@ -101,6 +101,37 @@ function getDateRange(startDate: string, endDate?: string, current?: boolean): s
                     <experience.Content />
                 </div>
 
+                {/* Timeline de roles */}
+                {experience.data.roles && experience.data.roles.length > 0 && (
+                    <div class="mb-4">
+                        <span class="text-gray-600 dark:text-gray-400 font-bold block mb-3">
+                            Evolución en el cargo:
+                        </span>
+                        <div class="space-y-4">
+                            {experience.data.roles.map((role, index) => (
+                                <div class="relative pl-6 border-l-2 border-blue-200 dark:border-blue-800">
+                                    <div class="absolute -left-2 top-0 w-4 h-4 bg-blue-500 rounded-full"></div>
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {role.title}
+                                        </h4>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                                            {getDateRange(role.startDate, role.endDate, role.current)}
+                                        </span>
+                                    </div>
+                                    {role.highlights && role.highlights.length > 0 && (
+                                        <ul class="list-disc pl-5 text-gray-600 dark:text-gray-300 text-sm leading-relaxed space-y-1">
+                                            {role.highlights.map((highlight) => (
+                                                <li>{highlight}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Aspectos destacados */}
                 {experience.data.highlights && experience.data.highlights.length > 0 && (
                     <div class="mb-4">
