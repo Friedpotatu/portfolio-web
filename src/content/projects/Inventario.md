@@ -26,6 +26,9 @@ galleryImages:
   - src: "/project1-vid-3.mp4"
     alt: "Características administrativas"
     caption: "Funcionalidades de administración, usuarios y configuración del sistema empresarial"
+  - src: "/project1-5.jpg"
+    alt: "Tótem de control de operaciones"
+    caption: "Tótem físico para mecánicos en el módulo de control de operaciones - interfaz táctil para gestión de OT en terreno"
 featured: true
 order: 1
 ---
