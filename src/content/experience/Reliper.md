@@ -7,11 +7,11 @@ endDate: "2024-03"
 current: false
 technologies: ["Laravel 8", "Tailwind CSS", "SQL Anywhere", "MariaDB", "PowerBuilder", "Notion"]
 highlights: [
-  "Colaboré en la migración del sistema ERP a una versión más reciente de PowerBuilder, documentando errores críticos mediante Notion",
-  "Desarrollé un sistema web para la gestión de activos fijos utilizando Laravel 8, incorporando funcionalidades como CRUD básico y escáner QR",
-  "Implementé arquitectura dual con MariaDB (usuarios) y SQL Anywhere (datos operacionales)",
-  "Realicé desarrollo full-stack utilizando Laravel 8, Tailwind CSS, MariaDB y SQL Anywhere (Sybase)",
-  "Contribuí al control y trazabilidad del inventario de activos a nivel organizacional"
+  "Colaboré en la migración del sistema ERP a una versión más reciente de PowerBuilder, documentando errores críticos mediante Notion.",
+  "Desarrollé un sistema web para la gestión de activos fijos utilizando Laravel 8, incorporando funcionalidades como CRUD básico y escáner QR.",
+  "Implementé arquitectura dual con MariaDB (usuarios) y SQL Anywhere (datos operacionales).",
+  "Realicé desarrollo full-stack utilizando Laravel 8, Tailwind CSS, MariaDB y SQL Anywhere (Sybase).",
+  "Contribuí al control y trazabilidad del inventario de activos a nivel organizacional."
 ]
 order: 3
 ---

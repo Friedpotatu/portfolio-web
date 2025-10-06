@@ -7,11 +7,11 @@ endDate: "2024-12"
 current: false
 technologies: ["Django", "Random Forest", "SQLite", "Python", "Scikit-learn", "Pandas", "Matplotlib"]
 highlights: [
-  "Desarrollé una plataforma web como parte de un sistema predictivo enfocado en la gestión de Seguridad y Salud Ocupacional",
-  "Integré un modelo de Machine Learning que analiza datos históricos de incidentes para anticipar eventos de riesgo",
-  "Implementé un panel web con Django para visualizar predicciones y datos clave",
-  "Creé visualización de datos mediante gráficos integrados en la interfaz",
-  "Logré integración seamless entre modelo predictivo (Random Forest) y interfaz web"
+  "Desarrollé una plataforma web como parte de un sistema predictivo enfocado en la gestión de Seguridad y Salud Ocupacional.",
+  "Integré un modelo de Machine Learning que analiza datos históricos de incidentes para anticipar eventos de riesgo.",
+  "Implementé un panel web con Django para visualizar predicciones y datos clave.",
+  "Creé visualización de datos mediante gráficos integrados en la interfaz.",
+  "Logré integración seamless entre modelo predictivo (Random Forest) y interfaz web."
 ]
 order: 2
 ---
