@@ -12,10 +12,10 @@ galleryImages:
   - src: "/project4-vid-2.mkv"
     alt: "Visualización 3D del yacimiento"
     caption: "Representación tridimensional interactiva del yacimiento con bloques coloreados por valor económico"
-  - src: "/src/assets/gallery/project4-1.png"
+  - src: "/project4-1.png"
     alt: "Panel de selección de escenarios"
     caption: "Dashboard con opciones de selección de escenarios y configuración del sistema"
-  - src: "/src/assets/gallery/project4-2.png"
+  - src: "/project4-2.png"
     alt: "Yacimiento 3D renderizado"
     caption: "Visualización tridimensional estática del yacimiento minero con bloques georeferenciados"
 featured: true
