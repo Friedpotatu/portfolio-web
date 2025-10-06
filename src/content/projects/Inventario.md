@@ -66,7 +66,7 @@ Intranet empresarial integral diseñada para centralizar y optimizar la gestión
 ### Características Técnicas
 
 - **Sistema de permisos**: Control de accesos personalizado mediante middleware.
-- **Cache Inteligente**: TTL optimizado (1-5 min) para diferentes tipos de datos.
+- **Caché Inteligente**: TTL optimizado (1-5 min) para diferentes tipos de datos.
 - **Storage Dinámico**: Configuración automática D: drive con fallback local.
 - **Exportación**: Excel/PDF con librerías especializadas.
 - **API REST**: Endpoints para integración inter-módulos.
