@@ -2,7 +2,7 @@
 title: "Sistema de Activos Fijos"
 description: "Sistema de gestión de activos fijos con código QR y visualización interactiva."
 image: "/Project3-1.jpg"
-technologies: ["Laravel 8", "Tailwind CSS", "SQL Anywhere", "D3.js", "Python", "FastAPI"]
+technologies: ["Laravel 8", "Tailwind CSS", "SQL Anywhere", "D3.js"]
 gallery: true
 galleryImages:
   - src: "/Project3-1.jpg"
