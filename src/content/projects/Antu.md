@@ -5,7 +5,7 @@ image: "/Project2-1.png"
 technologies: ["Django", "Random Forest", "SQLite", "Python", "Scikit-learn"]
 gallery: true
 galleryImages:
-  - src: "/project4-1.png"
+  - src: "/Project2-1.png"
     alt: "Dashboard predictivo del sistema Antu"
     caption: "Interfaz de visualización de análisis predictivo y gestión de incidentes"
 featured: true
