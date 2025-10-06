@@ -3,19 +3,56 @@ import '../styles/global.css';
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
-	title: string
+	title: string;
+	description?: string;
+	image?: string;
+	type?: 'website' | 'article';
 }
 
-const {title} = Astro.props
+const {
+	title,
+	description = 'Portfolio de Nicolás Pavez - Ingeniero de Software especializado en desarrollo web full-stack con Laravel, Django, y tecnologías modernas. Proyectos de sistemas empresariales, análisis de datos y soluciones tecnológicas.',
+	image = '/og-image.jpg',
+	type = 'website'
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://friedpotatu.dev');
+const socialImage = new URL(image, Astro.site || 'https://friedpotatu.dev');
 ---
 <!doctype html>
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+
+		<!-- SEO Básico -->
 		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={socialImage} />
+		<meta property="og:locale" content="es_ES" />
+		<meta property="og:site_name" content="Portfolio Nicolás Pavez" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={canonicalURL} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImage} />
+
+		<!-- SEO adicional -->
+		<meta name="author" content="Nicolás Pavez" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+
 		<ClientRouter />
 		<!-- Script para prevenir flash de contenido sin estilo -->
 		<script is:inline>
