@@ -26,9 +26,9 @@ Plataforma web predictiva desarrollada como proyecto de título, enfocada en la 
 
 El proyecto combina desarrollo web moderno con técnicas avanzadas de machine learning:
 
-- **Framework web**: Django para el backend y APIs RESTful
+- **Framework web**: Django para el backend
 - **Machine Learning**: Random Forest optimizado con validación cruzada
-- **Base de datos**: SQLite con optimizaciones para consultas analíticas
+- **Base de datos**: SQLite
 - **Visualización**: Librerías de Python integradas para gráficos dinámicos
 
 ## Objetivo del proyecto
