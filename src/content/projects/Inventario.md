@@ -59,7 +59,7 @@ Intranet empresarial integral diseñada para centralizar y optimizar la gestión
 ### Stack Principal
 
 - **Backend**: Laravel 12 con arquitectura modular y Services.
-- **Frontend**: Tailwind CSS + Alpine.js + Livewire para interactividad.
+- **Frontend**: Tailwind CSS y Livewire para interactividad.
 - **Base de datos**: MySQL con relaciones UUID optimizadas.
 - **Autenticación**: Sistema dual (Laravel Breeze + RUT para técnicos).
 

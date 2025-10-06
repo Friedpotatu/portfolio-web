@@ -50,7 +50,7 @@ Implementación de algoritmos de corte mínimo en grafos dirigidos para modelar 
 
 ### Motor económico
 
-Sistema de evaluación económica configurable que permite definir parámetros de precios, costos operacionales y recuperación metalúrgica para optimizar automáticamente entre extracción y descarte de bloques del yacimiento.
+Sistema de evaluación económica configurable que permite definir parámetros de precios, costos operacionales y recuperación metalúrgica para decidir automáticamente entre la extracción y el descarte de bloques del yacimiento.
 
 ## Resultados y métricas
 
