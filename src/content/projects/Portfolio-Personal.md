@@ -34,7 +34,6 @@ Portfolio personal desarrollado desde cero con tecnologías modernas, diseñado 
 - **Astro 5**: Framework estático moderno con hidratación selectiva
 - **TypeScript**: Tipado estático para mayor robustez y mantenibilidad
 - **Tailwind CSS 4**: Framework CSS utility-first para diseño responsive
-- **Alpine.js**: JavaScript reactivo para interacciones menores
 
 ### Características Técnicas
 
