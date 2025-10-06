@@ -39,37 +39,37 @@ Intranet empresarial integral diseñada para centralizar y optimizar la gestión
 
 ### Módulo Inventario TI (Núcleo Original)
 
-- **Gestión integral de activos**: Registro, seguimiento por sede/usuario, asignaciones individuales y por área
-- **Dashboard interactivo**: Métricas clave y visualización de estados en tiempo real
-- **Exportación avanzada**: Generación automática de Excel y actas de entrega/devolución
-- **Sistema de permisos**: Control de accesos personalizado mediante middleware
+- **Gestión integral de activos**: Registro, seguimiento por sede/usuario, asignaciones individuales y por área.
+- **Dashboard interactivo**: Métricas clave y visualización de estados en tiempo real.
+- **Exportación avanzada**: Generación automática de Excel y actas de entrega/devolución.
+- **Sistema de permisos**: Control de accesos personalizado mediante middleware.
 
 ### Módulos Operacionales en Desarrollo
 
-- **Operations**: Sistema de órdenes de trabajo con autenticación dual (admin/técnicos)
-- **Maintenance**: Gestión de mantenimiento preventivo/correctivo integrado
-- **Fleet**: Administración completa de vehículos y documentación técnica
-- **Human Resources**: Gestión de empleados con importación Excel masiva
-- **Warehouse**: Control de stock y órdenes de compra
-- **Transport Services**: Gestión de servicios, clientes y contratos
-- **Accounting**: Seguimiento financiero y créditos
+- **Operations**: Sistema de órdenes de trabajo con autenticación dual (admin/técnicos).
+- **Maintenance**: Gestión de mantenimiento preventivo/correctivo integrado.
+- **Fleet**: Administración completa de vehículos y documentación técnica.
+- **Human Resources**: Gestión de empleados con importación Excel masiva.
+- **Warehouse**: Control de stock y órdenes de compra.
+- **Transport Services**: Gestión de servicios, clientes y contratos.
+- **Accounting**: Seguimiento financiero y créditos.
 
 ## Arquitectura Tecnológica
 
 ### Stack Principal
 
-- **Backend**: Laravel 12 con arquitectura modular y Services
-- **Frontend**: Tailwind CSS + Alpine.js + Livewire para interactividad
-- **Base de datos**: MySQL con relaciones UUID optimizadas
-- **Autenticación**: Sistema dual (Laravel Breeze + RUT para técnicos)
+- **Backend**: Laravel 12 con arquitectura modular y Services.
+- **Frontend**: Tailwind CSS + Alpine.js + Livewire para interactividad.
+- **Base de datos**: MySQL con relaciones UUID optimizadas.
+- **Autenticación**: Sistema dual (Laravel Breeze + RUT para técnicos).
 
 ### Características Técnicas
 
-- **Sistema de permisos**: Control de accesos personalizado mediante middleware
-- **Cache Inteligente**: TTL optimizado (1-5 min) para diferentes tipos de datos
-- **Storage Dinámico**: Configuración automática D: drive con fallback local
-- **Exportación**: Excel/PDF con librerías especializadas
-- **API REST**: Endpoints para integración inter-módulos
+- **Sistema de permisos**: Control de accesos personalizado mediante middleware.
+- **Cache Inteligente**: TTL optimizado (1-5 min) para diferentes tipos de datos.
+- **Storage Dinámico**: Configuración automática D: drive con fallback local.
+- **Exportación**: Excel/PDF con librerías especializadas.
+- **API REST**: Endpoints para integración inter-módulos.
 
 ## Estado y Evolución Continua
 
@@ -79,10 +79,10 @@ El sistema comenzó como una solución de inventario TI y ha evolucionado hacia 
 
 ### Desarrollo Iterativo
 
-- **Metodología**: Desarrollo ágil con releases modulares
-- **Testing**: Suite completa con Pest PHP
-- **CI/CD**: Pipeline automatizado con Vite y formateador Pint
-- **Escalabilidad**: Arquitectura preparada para crecimiento empresarial
+- **Metodología**: Desarrollo ágil con releases modulares.
+- **Testing**: Suite completa con Pest PHP.
+- **CI/CD**: Pipeline automatizado con Vite y formateador Pint.
+- **Escalabilidad**: Arquitectura preparada para crecimiento empresarial.
 
 ### Impacto Organizacional
 

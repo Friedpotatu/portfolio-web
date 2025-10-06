@@ -1,6 +1,6 @@
 ---
 title: "Sistema de Análisis y Optimización Minera"
-description: "Proyecto académico de análisis económico y visualización 3D/2D de procesos mineros usando el yacimiento ficticio Alto los Andes para comprender el ámbito minero."
+description: "Proyecto académico de análisis económico y visualización 3D/2D de procesos mineros usando el yacimiento ficticio Alto Los Andes para comprender el ámbito minero."
 image: "/project4-vid-1.mkv"
 technologies: ["Python", "Dash", "PyVista", "NetworkX", "Pandas", "Matplotlib"]
 github: "https://github.com/T-Procesos-Mineros/mining_process"
@@ -26,21 +26,21 @@ Proyecto académico desarrollado para comprender los procesos mineros y su anál
 
 ## Funcionalidades principales
 
-- **Gestión de escenarios**: Análisis comparativo de múltiples escenarios de explotación (Escenario 00-09)
-- **Calculadora económica**: Motor de cálculo de rentabilidad por bloques con parámetros configurables
-- **Visualización 3D**: Representaciones tridimensionales interactivas con PyVista
-- **Límite económico (UPL)**: Implementación experimental del Ultimate Pit Limit usando teoría de grafos
-- **Análisis estadístico**: Histogramas, curvas tonelaje-ley y análisis de distribución
+- **Gestión de escenarios**: Análisis comparativo de múltiples escenarios de explotación (Escenario 00-09).
+- **Calculadora económica**: Motor de cálculo de rentabilidad por bloques con parámetros configurables.
+- **Visualización 3D**: Representaciones tridimensionales interactivas con PyVista.
+- **Límite económico (UPL)**: Implementación experimental del Ultimate Pit Limit usando teoría de grafos.
+- **Análisis estadístico**: Histogramas, curvas tonelaje-ley y análisis de distribución.
 
 ## Tecnología e innovación
 
 El sistema integra múltiples tecnologías especializadas para análisis minero:
 
-- **Interfaz web**: Dash para dashboards interactivos y análisis en tiempo real
-- **Visualización 3D**: PyVista para renderizado volumétrico de yacimientos
-- **Optimización**: NetworkX con algoritmos de flujo máximo para UPL
-- **Análisis de datos**: Pandas y NumPy para procesamiento de grandes volúmenes
-- **Visualización 2D**: Matplotlib para gráficos estadísticos y cortes transversales
+- **Interfaz web**: Dash para dashboards interactivos y análisis en tiempo real.
+- **Visualización 3D**: PyVista para renderizado volumétrico de yacimientos.
+- **Optimización**: NetworkX con algoritmos de flujo máximo para UPL.
+- **Análisis de datos**: Pandas y NumPy para procesamiento de grandes volúmenes.
+- **Visualización 2D**: Matplotlib para gráficos estadísticos y cortes transversales.
 
 ## Algoritmos especializados
 
@@ -54,10 +54,10 @@ Sistema de evaluación económica configurable que permite definir parámetros d
 
 ## Resultados y métricas
 
-- **Precisión espacial**: Georeferenciación exacta con coordenadas XYZ
-- **Optimización**: Maximización del valor económico total del yacimiento
-- **Planificación temporal**: Secuenciamiento minero por períodos operacionales
-- **Análisis comparativo**: Evaluación de múltiples escenarios de explotación
+- **Precisión espacial**: Georeferenciación exacta con coordenadas XYZ.
+- **Optimización**: Maximización del valor económico total del yacimiento.
+- **Planificación temporal**: Secuenciamiento minero por períodos operacionales.
+- **Análisis comparativo**: Evaluación de múltiples escenarios de explotación.
 
 ## Objetivo académico
 

@@ -39,17 +39,17 @@ Sistema completo de gestión de activos fijos desarrollado durante mi práctica 
 
 ## Arquitectura del sistema
 
-- **Frontend**: Interfaz desarrollada con Tailwind CSS
-- **Backend robusto**: Laravel 8 como framework principal con APIs optimizadas
-- **Doble base de datos**: MariaDB para usuarios y SQL Anywhere para datos operacionales
-- **Códigos QR**: Generación y lectura automática para identificación de activos
+- **Frontend**: Interfaz desarrollada con Tailwind CSS.
+- **Backend robusto**: Laravel 8 como framework principal con APIs optimizadas.
+- **Doble base de datos**: MariaDB para usuarios y SQL Anywhere para datos operacionales.
+- **Códigos QR**: Generación y lectura automática para identificación de activos.
 
 ## Funcionalidades clave
 
-- **CRUD completo**: Operaciones completas de creación, lectura, actualización y eliminación
-- **Escáner QR integrado**: Identificación rápida de activos mediante códigos únicos
-- **Gestión por ubicación**: Seguimiento detallado por sede y área de trabajo
-- **Asignación flexible**: Sistema de asignaciones individuales y por departamento
+- **CRUD completo**: Operaciones completas de creación, lectura, actualización y eliminación.
+- **Escáner QR integrado**: Identificación rápida de activos mediante códigos únicos.
+- **Gestión por ubicación**: Seguimiento detallado por sede y área de trabajo.
+- **Asignación flexible**: Sistema de asignaciones individuales y por departamento.
 
 ## Desafíos técnicos
 
