@@ -1,7 +1,7 @@
 ---
 title: "Sistema Antu - Predicción de Incidentes"
 description: "Sistema de visualización del análisis de datos y modelo predictivo para la Gerencia de Seguridad y Salud Ocupacional."
-image: "/project4-1.png"
+image: "/Project2-1.png"
 technologies: ["Django", "Random Forest", "SQLite", "Python", "Scikit-learn"]
 gallery: true
 galleryImages:
