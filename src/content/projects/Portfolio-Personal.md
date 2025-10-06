@@ -1,10 +1,9 @@
 ---
 title: "Portfolio Personal"
 description: "Sitio web personal moderno desarrollado con Astro 5, TypeScript y Tailwind CSS, con sistema de gestión de contenido y deploy automatizado."
-image: "/project1-vid-1.mp4"
+image: "/src/assets/gallery/project5-1.png"
 technologies: ["Astro 5", "TypeScript", "Tailwind CSS", "GitHub Actions", "Hostinger"]
 github: "https://github.com/Friedpotatu/portfolio-web"
-demo: "https://friedpotatu.dev"
 gallery: false
 featured: true
 order: 0
