@@ -45,17 +45,19 @@ El sistema integra múltiples tecnologías especializadas para análisis minero:
 ## Algoritmos especializados
 
 ### Cálculo de Ultimate Pit Limit (Experimental)
+
 Implementación de algoritmos de corte mínimo en grafos dirigidos para modelar relaciones de precedencia minera. Aunque el cálculo no alcanzó la precisión completa, sirvió como ejercicio de aprendizaje en optimización de yacimientos.
 
 ### Motor económico
-Sistema de evaluación que considera precios de metales ($18M por tonelada), recuperación metalúrgica (85%), costos de minería ($2.5/ton) y procesamiento ($5/ton), optimizando automáticamente entre extracción y descarte.
+
+Sistema de evaluación económica configurable que permite definir parámetros de precios, costos operacionales y recuperación metalúrgica para optimizar automáticamente entre extracción y descarte de bloques del yacimiento.
 
 ## Resultados y métricas
 
-- **Volumen de datos**: Procesamiento de +15,000 bloques por escenario
 - **Precisión espacial**: Georeferenciación exacta con coordenadas XYZ
 - **Optimización**: Maximización del valor económico total del yacimiento
 - **Planificación temporal**: Secuenciamiento minero por períodos operacionales
+- **Análisis comparativo**: Evaluación de múltiples escenarios de explotación
 
 ## Objetivo académico
 

@@ -31,10 +31,10 @@ El proyecto combina desarrollo web moderno con técnicas avanzadas de machine le
 - **Base de datos**: SQLite con optimizaciones para consultas analíticas
 - **Visualización**: Librerías de Python integradas para gráficos dinámicos
 
-## Resultados y métricas
+## Objetivo del proyecto
 
-El modelo desarrollado logró una precisión del 78% en la predicción de incidentes, permitiendo a la gerencia implementar medidas preventivas con hasta 30 días de anticipación.
+Este prototipo de proyecto de título tenía como objetivo explorar el potencial del análisis de datos para transformar la gestión de seguridad laboral de un enfoque reactivo a uno proactivo, permitiendo a la gerencia anticipar y prevenir incidentes.
 
-## Impacto en seguridad
+## Aprendizajes académicos
 
-Esta solución representa un avance significativo en la gestión proactiva de riesgos laborales, transformando datos históricos en insights accionables para la prevención de incidentes.
+El desarrollo de este sistema me permitió comprender la aplicación práctica del machine learning en contextos industriales reales y la importancia de los datos históricos para generar insights predictivos en seguridad ocupacional.
