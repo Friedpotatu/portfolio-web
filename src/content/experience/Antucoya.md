@@ -1,5 +1,5 @@
 ---
-title: "Analista de Datos - Exámen de Título"
+title: "Analista de Datos - Examen de Título"
 company: "Minera Antucoya"
 location: "Antofagasta, Chile"
 startDate: "2024-08"

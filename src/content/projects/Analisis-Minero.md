@@ -22,7 +22,7 @@ featured: true
 order: 4
 ---
 
-Proyecto académico desarrollado para comprender los procesos mineros y su análisis mediante herramientas de ciencia de datos. Utiliza el yacimiento ficticio "Alto los Andes" como caso de estudio para explorar técnicas de modelado económico y visualización de datos mineros.
+Proyecto académico desarrollado para comprender los procesos mineros y su análisis mediante herramientas de ciencia de datos. Utiliza el yacimiento ficticio "Alto Los Andes" como caso de estudio para explorar técnicas de modelado económico y visualización de datos mineros.
 
 ## Funcionalidades principales
 

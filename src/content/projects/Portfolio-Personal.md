@@ -52,7 +52,7 @@ Portfolio personal desarrollado desde cero con tecnologías modernas, diseñado 
 
 - **GitHub Actions**: Workflow automatizado para build y deploy.
 - **FTP Deploy**: Subida automática a Hostinger tras cada push.
-- **Build Optimization**: Compilación optimizada con cache de dependencias.
+- **Build Optimization**: Compilación optimizada con caché de dependencias.
 - **Error Handling**: Manejo robusto de errores en el pipeline.
 
 ### Infraestructura
