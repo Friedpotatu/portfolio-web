@@ -11,7 +11,7 @@ interface Props {
 
 const {
 	title,
-	description = 'Portfolio de Nicolás Pavez - Ingeniero de Software especializado en desarrollo web full-stack con Laravel, Django, y tecnologías modernas. Proyectos de sistemas empresariales, análisis de datos y soluciones tecnológicas.',
+	description = 'Portafolio de Nicolás Pavez - Ingeniero de Software especializado en desarrollo web full-stack con Laravel, Django, y tecnologías modernas. Proyectos de sistemas empresariales, análisis de datos y soluciones tecnológicas.',
 	image = '/og-image.png',
 	type = 'website'
 } = Astro.props;
@@ -39,7 +39,7 @@ const socialImage = new URL(image, Astro.site || 'https://friedpotatu.dev');
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={socialImage} />
 		<meta property="og:locale" content="es_ES" />
-		<meta property="og:site_name" content="Portfolio Nicolás Pavez" />
+		<meta property="og:site_name" content="Portafolio Nicolás Pavez" />
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />

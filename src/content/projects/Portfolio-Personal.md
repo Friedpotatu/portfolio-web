@@ -1,5 +1,5 @@
 ---
-title: "Portfolio Personal"
+title: "Portafolio Personal"
 description: "Sitio web personal moderno desarrollado con Astro 5, TypeScript y Tailwind CSS, con sistema de gestión de contenido y deploy automatizado."
 image: "/project5-1.png"
 technologies: ["Astro 5", "TypeScript", "Tailwind CSS", "GitHub Actions", "Hostinger"]
@@ -7,13 +7,13 @@ github: "https://github.com/Friedpotatu/portfolio-web"
 gallery: true
 galleryImages:
   - src: "/project5-1.png"
-    alt: "Portfolio Personal - Vista principal"
-    caption: "Vista principal del portfolio con navegación lateral y secciones de proyectos"
+    alt: "Portafolio Personal - Vista principal"
+    caption: "Vista principal del portafolio con navegación lateral y secciones de proyectos"
 featured: true
 order: 0
 ---
 
-Portfolio personal desarrollado desde cero con tecnologías modernas, diseñado para mostrar proyectos, experiencia laboral y habilidades técnicas de forma profesional e interactiva.
+Portafolio personal desarrollado desde cero con tecnologías modernas, diseñado para mostrar proyectos, experiencia laboral y habilidades técnicas de forma profesional e interactiva.
 
 ## Características Principales
 
@@ -77,4 +77,4 @@ Timeline profesional con soporte para múltiples roles por empresa, fechas de in
 
 ## Impacto y Resultados
 
-Este portfolio representa no solo una muestra de habilidades técnicas, sino también una herramienta profesional completamente funcional que demuestra capacidades en desarrollo full-stack, DevOps y diseño UX/UI moderno.
+Este portafolio representa no solo una muestra de habilidades técnicas, sino también una herramienta profesional completamente funcional que demuestra capacidades en desarrollo full-stack, DevOps y diseño UX/UI moderno.
