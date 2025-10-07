@@ -47,13 +47,18 @@ import About from "./icons/About.astro"
     about: { color: 'text-orange-600', darkColor: 'dark:text-orange-400' }
   };
 
+  // Variable para mantener la sección activa actual
+  let currentActiveSection = 'home';
+
   // Función para actualizar el estado activo
   function updateActiveSection(activeSection: string): void {
+    currentActiveSection = activeSection;
+
     // Limpiar todos los iconos
     document.querySelectorAll('.nav-item svg').forEach(svg => {
       svg.classList.remove(
         'text-blue-600', 'dark:text-blue-400',
-        'text-green-600', 'dark:text-green-400', 
+        'text-green-600', 'dark:text-green-400',
         'text-purple-600', 'dark:text-purple-400',
         'text-orange-600', 'dark:text-orange-400'
       );
@@ -71,13 +76,21 @@ import About from "./icons/About.astro"
     }
   }
 
+  // Observer global para limpiar correctamente
+  let sectionObserver: IntersectionObserver | null = null;
+
   // Configurar Intersection Observer
   function setupSectionObserver(): void {
+    // Limpiar observer anterior si existe
+    if (sectionObserver) {
+      sectionObserver.disconnect();
+    }
+
     const sections = document.querySelectorAll('section[id]');
 
     if (sections.length === 0) return;
 
-    const observer = new IntersectionObserver(
+    sectionObserver = new IntersectionObserver(
       (entries) => {
         // Encontrar todas las secciones visibles actualmente
         const visibleSections = Array.from(sections)
@@ -117,23 +130,46 @@ import About from "./icons/About.astro"
     );
 
     sections.forEach(section => {
-      observer.observe(section);
+      sectionObserver!.observe(section);
     });
   }
 
-  // Inicializar cuando el DOM esté listo
-  document.addEventListener('DOMContentLoaded', () => {
+  // Inicializar cuando la página esté lista (compatible con View Transitions)
+  document.addEventListener('astro:page-load', () => {
     setupSectionObserver();
-    
+
     // Establecer la sección inicial como activa
     updateActiveSection('home');
   });
+
+  // Escuchar cambios de clase en el documentElement (cambios de tema)
+  let themeObserver: MutationObserver | null = null;
+
+  function setupThemeObserver(): void {
+    // Limpiar observer anterior si existe
+    if (themeObserver) {
+      themeObserver.disconnect();
+    }
+
+    themeObserver = new MutationObserver(() => {
+      // Re-aplicar colores cuando cambia el tema
+      updateActiveSection(currentActiveSection);
+    });
+
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+
+  // Configurar observer en cada carga de página
+  document.addEventListener('astro:page-load', setupThemeObserver);
 
   // Manejar navegación manual
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     const navItem = target.closest('.nav-item') as HTMLAnchorElement;
-    
+
     if (navItem) {
       const section = navItem.getAttribute('data-section');
       if (section) {
