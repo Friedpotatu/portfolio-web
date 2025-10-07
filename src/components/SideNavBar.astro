@@ -74,20 +74,45 @@ import About from "./icons/About.astro"
   // Configurar Intersection Observer
   function setupSectionObserver(): void {
     const sections = document.querySelectorAll('section[id]');
-    
+
     if (sections.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            updateActiveSection(entry.target.id);
-          }
-        });
+        // Encontrar todas las secciones visibles actualmente
+        const visibleSections = Array.from(sections)
+          .map(section => {
+            const rect = section.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+
+            // Calcular qué porcentaje de la sección está visible en el viewport
+            const visibleTop = Math.max(0, rect.top);
+            const visibleBottom = Math.min(viewportHeight, rect.bottom);
+            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+            const visibilityRatio = visibleHeight / viewportHeight;
+
+            return {
+              id: section.id,
+              visibilityRatio,
+              isVisible: rect.top < viewportHeight * 0.5 && rect.bottom > viewportHeight * 0.5
+            };
+          })
+          .filter(section => section.visibilityRatio > 0)
+          .sort((a, b) => {
+            // Priorizar la sección que tiene su centro más cerca del centro del viewport
+            if (a.isVisible) return -1;
+            if (b.isVisible) return 1;
+            return b.visibilityRatio - a.visibilityRatio;
+          });
+
+        if (visibleSections.length > 0) {
+          updateActiveSection(visibleSections[0].id);
+        }
       },
       {
-        rootMargin: '-20% 0px -20% 0px',
-        threshold: 0.3
+        root: null,
+        rootMargin: '0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1]
       }
     );
 
