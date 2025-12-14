@@ -1,10 +1,12 @@
 ---
 import Mail from './icons/Mail.astro';
+import { getTechColor } from '../utils/techColors';
 
 // Lenguajes y tecnologías principales
 const skills = [
-    "PHP/Laravel", "Python/Django", "JavaScript", "MySQL", "MariaDB", 
-    "SQLite", "Tailwind CSS", "Bootstrap", "Git", "FastAPI"
+    "Laravel 12", "Django", "Python", "FastAPI",
+    "TypeScript", "Astro 5", "Tailwind CSS", "Bootstrap 5",
+    "MariaDB", "SQLite", "SQL Anywhere"
 ];
 ---
 <div class="max-w-4xl mx-auto">
@@ -32,7 +34,7 @@ const skills = [
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Tecnologías con las que he trabajado:</h3>
             <div class="flex flex-wrap gap-2">
                 {skills.map((skill) => (
-                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg text-sm">
+                    <span class={`px-3 py-1 rounded-full text-xs font-medium ${getTechColor(skill)}`}>
                         {skill}
                     </span>
                 ))}
