@@ -149,13 +149,32 @@ const { Content, headings } = await render(entry);
 
     <script>
         // Manejar navegación del botón "Volver a Proyectos"
+        let backBtnHandler = null;
+
         document.addEventListener('astro:page-load', () => {
             const backBtn = document.getElementById('back-btn');
-            
-            backBtn?.addEventListener('click', async () => {
+
+            // Limpiar handler anterior si existe
+            if (backBtnHandler && backBtn) {
+                backBtn.removeEventListener('click', backBtnHandler);
+            }
+
+            // Crear nuevo handler
+            backBtnHandler = async () => {
                 const { navigate } = await import("astro:transitions/client");
                 navigate('/#projects');
-            });
+            };
+
+            backBtn?.addEventListener('click', backBtnHandler);
         });
+
+        // Limpiar antes de navegar (evitar memory leaks)
+        document.addEventListener('astro:before-preparation', () => {
+            const backBtn = document.getElementById('back-btn');
+            if (backBtn && backBtnHandler) {
+                backBtn.removeEventListener('click', backBtnHandler);
+                backBtnHandler = null;
+            }
+        }, { once: true });
     </script>
 </Layout>
