@@ -67,9 +67,20 @@
     applyTheme();
   }
 
+  // Variable para guardar el botón y limpiar listeners
+  let themeToggleBtn = null;
+
   // Agregar event listener al botón
   document.addEventListener('astro:page-load', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle?.addEventListener('click', toggleTheme);
+    themeToggleBtn = document.getElementById('theme-toggle');
+    themeToggleBtn?.addEventListener('click', toggleTheme);
   });
+
+  // Limpiar event listener antes de navegar (evitar memory leaks)
+  document.addEventListener('astro:before-preparation', () => {
+    if (themeToggleBtn) {
+      themeToggleBtn.removeEventListener('click', toggleTheme);
+      themeToggleBtn = null;
+    }
+  }, { once: true });
 </script>

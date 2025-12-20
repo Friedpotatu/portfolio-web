@@ -159,12 +159,15 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
 </div>
 
 <script define:vars={{ images, projectTitle }}>
+    // Variables globales para limpieza
+    let galleryCleanup = null;
+
     function initializeGallery() {
         let currentIndex = 0;
-        
+
         // Generar ID único para esta instancia
         const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        
+
         // Elementos del DOM con IDs únicos
         const modal = document.getElementById(`gallery-modal-${galleryId}`);
         const modalCaption = document.getElementById(`modal-caption-${galleryId}`);
@@ -173,12 +176,12 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
         const prevBtn = document.getElementById(`prev-btn-${galleryId}`);
         const nextBtn = document.getElementById(`next-btn-${galleryId}`);
         const galleryItems = document.querySelectorAll(`[data-gallery-id="${galleryId}"]`);
-        
+
         // Verificar que los elementos existan
         if (!modal || !modalCaption || !currentIndexEl) {
             return; // Si no existen los elementos, no inicializar
         }
-        
+
         // Función para abrir modal
         function openModal(index) {
             currentIndex = index;
@@ -186,7 +189,7 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
-            
+
             // Mostrar/ocultar botones de navegación
             if (images.length <= 1) {
                 if (prevBtn) prevBtn.style.display = 'none';
@@ -196,7 +199,7 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
                 if (nextBtn) nextBtn.style.display = 'block';
             }
         }
-        
+
         // Función para cerrar modal
         function closeModal() {
             // Pausar todos los videos
@@ -207,33 +210,33 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
                     video.currentTime = 0;
                 }
             });
-            
+
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = '';
         }
-        
+
         // Función para actualizar contenido del modal
         function updateModalContent() {
             if (!images || images.length === 0) return;
-            
+
             const image = images[currentIndex];
             if (!image) return;
-            
+
             // Ocultar todos los elementos primero
             images.forEach((_, index) => {
                 const img = document.getElementById(`modal-image-${galleryId}-${index}`);
                 const video = document.getElementById(`modal-video-${galleryId}-${index}`);
-                
+
                 if (img) img.style.display = 'none';
                 if (video) {
                     video.style.display = 'none';
                     video.pause();
                 }
             });
-            
+
             const isVideo = image.src && (image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm'));
-            
+
             if (isVideo) {
                 // Mostrar video específico
                 const currentVideo = document.getElementById(`modal-video-${galleryId}-${currentIndex}`);
@@ -251,56 +254,35 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
                     currentImage.style.display = 'block';
                 }
             }
-            
+
             // Actualizar caption y contador
             modalCaption.textContent = image.caption || '';
             currentIndexEl.textContent = (currentIndex + 1).toString();
         }
-        
+
         // Función para ir a la siguiente imagen
         function nextImage() {
-            if (images.length <= 1) return; // No navegar si solo hay una imagen
+            if (images.length <= 1) return;
             currentIndex = (currentIndex + 1) % images.length;
             updateModalContent();
         }
-        
+
         // Función para ir a la imagen anterior
         function prevImage() {
-            if (images.length <= 1) return; // No navegar si solo hay una imagen
+            if (images.length <= 1) return;
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateModalContent();
         }
-        
-        // Event listeners
-        if (galleryItems) {
-            galleryItems.forEach((item, index) => {
-                if (item) {
-                    item.addEventListener('click', () => openModal(index));
-                }
-            });
-        }
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeModal);
-        }
-        if (nextBtn) {
-            nextBtn.addEventListener('click', nextImage);
-        }
-        if (prevBtn) {
-            prevBtn.addEventListener('click', prevImage);
-        }
-        
-        // Cerrar modal al hacer clic fuera de la imagen
-        if (modal) {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-        }
-        
-        // Navegación con teclado
-        document.addEventListener('keydown', (e) => {
+
+        // Handlers guardados para limpieza
+        const itemHandlers = [];
+        const modalClickHandler = (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
+
+        const keydownHandler = (e) => {
             if (modal && !modal.classList.contains('hidden')) {
                 switch (e.key) {
                     case 'Escape':
@@ -314,12 +296,90 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
                         break;
                 }
             }
-        });
+        };
+
+        // Agregar event listeners
+        if (galleryItems) {
+            galleryItems.forEach((item, index) => {
+                if (item) {
+                    const handler = () => openModal(index);
+                    item.addEventListener('click', handler);
+                    itemHandlers.push({ element: item, handler });
+                }
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextImage);
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevImage);
+        }
+
+        if (modal) {
+            modal.addEventListener('click', modalClickHandler);
+        }
+
+        document.addEventListener('keydown', keydownHandler);
+
+        // Función de limpieza para remover todos los event listeners
+        galleryCleanup = () => {
+            // Remover listeners de items de galería
+            itemHandlers.forEach(({ element, handler }) => {
+                element.removeEventListener('click', handler);
+            });
+
+            // Remover listeners de botones
+            if (closeBtn) closeBtn.removeEventListener('click', closeModal);
+            if (nextBtn) nextBtn.removeEventListener('click', nextImage);
+            if (prevBtn) prevBtn.removeEventListener('click', prevImage);
+
+            // Remover listener del modal
+            if (modal) modal.removeEventListener('click', modalClickHandler);
+
+            // Remover listener del teclado (CRÍTICO para evitar memory leaks)
+            document.removeEventListener('keydown', keydownHandler);
+
+            // Pausar todos los videos
+            images.forEach((_, index) => {
+                const video = document.getElementById(`modal-video-${galleryId}-${index}`);
+                if (video) {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
+
+            // Cerrar modal si está abierto
+            if (modal && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        };
     }
-    
-    // Inicializar cuando la página se carga o cuando Astro navega
-    document.addEventListener('astro:page-load', initializeGallery);
-    
+
+    // Inicializar cuando la página se carga
+    document.addEventListener('astro:page-load', () => {
+        // Limpiar instancia anterior si existe
+        if (galleryCleanup) {
+            galleryCleanup();
+            galleryCleanup = null;
+        }
+
+        initializeGallery();
+    });
+
+    // Limpiar antes de navegar a otra página (CRÍTICO para evitar memory leaks)
+    document.addEventListener('astro:before-preparation', () => {
+        if (galleryCleanup) {
+            galleryCleanup();
+            galleryCleanup = null;
+        }
+    }, { once: true });
+
     // Inicializar inmediatamente si el DOM ya está listo
     if (document.readyState !== 'loading') {
         initializeGallery();

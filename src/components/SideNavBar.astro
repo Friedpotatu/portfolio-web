@@ -165,8 +165,8 @@ import About from "./icons/About.astro"
   // Configurar observer en cada carga de página
   document.addEventListener('astro:page-load', setupThemeObserver);
 
-  // Manejar navegación manual
-  document.addEventListener('click', (e) => {
+  // Handler para navegación manual
+  const navClickHandler = (e: Event) => {
     const target = e.target as HTMLElement;
     const navItem = target.closest('.nav-item') as HTMLAnchorElement;
 
@@ -179,5 +179,24 @@ import About from "./icons/About.astro"
         }, 100);
       }
     }
-  });
+  };
+
+  // Agregar event listener de navegación
+  document.addEventListener('click', navClickHandler);
+
+  // Limpiar observers y listeners antes de navegar (evitar memory leaks)
+  document.addEventListener('astro:before-preparation', () => {
+    // Limpiar observers
+    if (sectionObserver) {
+      sectionObserver.disconnect();
+      sectionObserver = null;
+    }
+    if (themeObserver) {
+      themeObserver.disconnect();
+      themeObserver = null;
+    }
+
+    // Remover event listener de clicks
+    document.removeEventListener('click', navClickHandler);
+  }, { once: true });
 </script>
