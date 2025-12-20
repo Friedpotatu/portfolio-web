@@ -29,10 +29,10 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
                     {image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm') ? (
                         <video
                             src={image.src}
-                            autoplay
                             muted
                             loop
                             playsinline
+                            preload="metadata"
                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                     ) : (
@@ -90,40 +90,10 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
             </button>
         </div>
         
-        <!-- Contenedor principal de imagen/video -->
+        <!-- Contenedor principal de imagen/video (renderizado dinámico) -->
         <div class="flex-1 flex items-center justify-center px-4 pb-20 min-h-0">
-            <div class="relative w-full h-full flex items-center justify-center">
-            <!-- Pre-render all images using Image component for better performance -->
-            {images.map((image, index) => (
-                !image.src.endsWith('.mkv') && !image.src.endsWith('.mp4') && !image.src.endsWith('.webm') ? (
-                    <Image
-                        id={`modal-image-${galleryId}-${index}`}
-                        src={image.src}
-                        alt={image.alt}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-                        style="display: none;"
-                        width={1200}
-                        height={800}
-                    />
-                ) : null
-            ))}
-            
-            <!-- Pre-render all videos -->
-            {images.map((image, index) => (
-                image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm') ? (
-                    <video 
-                        id={`modal-video-${galleryId}-${index}`}
-                        src={image.src}
-                        controls
-                        autoplay
-                        muted
-                        loop
-                        class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-                        style="display: none;"
-                    />
-                ) : null
-            ))}
+            <div id={`modal-content-${galleryId}`} class="relative w-full h-full flex items-center justify-center">
+                <!-- El contenido se renderiza dinámicamente aquí -->
             </div>
         </div>
         
@@ -164,12 +134,15 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     function initializeGallery() {
         let currentIndex = 0;
+        let currentMediaElement = null; // Elemento actual renderizado
+        const preloadCache = new Map(); // Cache para preload
 
         // Generar ID único para esta instancia
         const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-        // Elementos del DOM con IDs únicos
+        // Elementos del DOM
         const modal = document.getElementById(`gallery-modal-${galleryId}`);
+        const modalContent = document.getElementById(`modal-content-${galleryId}`);
         const modalCaption = document.getElementById(`modal-caption-${galleryId}`);
         const currentIndexEl = document.getElementById(`current-index-${galleryId}`);
         const closeBtn = document.getElementById(`close-modal-${galleryId}`);
@@ -177,12 +150,108 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
         const nextBtn = document.getElementById(`next-btn-${galleryId}`);
         const galleryItems = document.querySelectorAll(`[data-gallery-id="${galleryId}"]`);
 
-        // Verificar que los elementos existan
-        if (!modal || !modalCaption || !currentIndexEl) {
-            return; // Si no existen los elementos, no inicializar
+        if (!modal || !modalContent || !modalCaption || !currentIndexEl) {
+            return;
         }
 
-        // Función para abrir modal
+        // Detectar si es video
+        function isVideo(src) {
+            return src && (src.endsWith('.mkv') || src.endsWith('.mp4') || src.endsWith('.webm'));
+        }
+
+        // Renderizar media dinámicamente
+        function renderMedia(index) {
+            const item = images[index];
+            if (!item) return null;
+
+            let element;
+
+            if (isVideo(item.src)) {
+                // Crear elemento video
+                element = document.createElement('video');
+                element.src = item.src;
+                element.controls = true;
+                element.autoplay = true;
+                element.muted = true;
+                element.loop = true;
+                element.className = 'max-w-full max-h-full object-contain rounded-lg shadow-2xl';
+            } else {
+                // Crear elemento img
+                element = document.createElement('img');
+                element.src = item.src;
+                element.alt = item.alt;
+                element.className = 'max-w-full max-h-full object-contain rounded-lg shadow-2xl';
+            }
+
+            return element;
+        }
+
+        // Precargar imagen/video adyacente
+        function preloadAdjacent(index) {
+            // Precargar siguiente
+            const nextIndex = (index + 1) % images.length;
+            if (!preloadCache.has(nextIndex) && images[nextIndex]) {
+                const nextItem = images[nextIndex];
+                if (isVideo(nextItem.src)) {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    video.src = nextItem.src;
+                    preloadCache.set(nextIndex, video);
+                } else {
+                    const img = new Image();
+                    img.src = nextItem.src;
+                    preloadCache.set(nextIndex, img);
+                }
+            }
+
+            // Precargar anterior
+            const prevIndex = (index - 1 + images.length) % images.length;
+            if (!preloadCache.has(prevIndex) && images[prevIndex]) {
+                const prevItem = images[prevIndex];
+                if (isVideo(prevItem.src)) {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    video.src = prevItem.src;
+                    preloadCache.set(prevIndex, video);
+                } else {
+                    const img = new Image();
+                    img.src = prevItem.src;
+                    preloadCache.set(prevIndex, img);
+                }
+            }
+        }
+
+        // Actualizar contenido del modal
+        function updateModalContent() {
+            if (!images || images.length === 0) return;
+
+            const item = images[currentIndex];
+            if (!item) return;
+
+            // Pausar y limpiar elemento anterior
+            if (currentMediaElement) {
+                if (currentMediaElement.tagName === 'VIDEO') {
+                    currentMediaElement.pause();
+                }
+                currentMediaElement.remove();
+                currentMediaElement = null;
+            }
+
+            // Renderizar nuevo elemento
+            currentMediaElement = renderMedia(currentIndex);
+            if (currentMediaElement) {
+                modalContent.appendChild(currentMediaElement);
+            }
+
+            // Actualizar caption y contador
+            modalCaption.textContent = item.caption || '';
+            currentIndexEl.textContent = (currentIndex + 1).toString();
+
+            // Precargar imágenes adyacentes
+            preloadAdjacent(currentIndex);
+        }
+
+        // Abrir modal
         function openModal(index) {
             currentIndex = index;
             updateModalContent();
@@ -200,81 +269,38 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
             }
         }
 
-        // Función para cerrar modal
+        // Cerrar modal
         function closeModal() {
-            // Pausar todos los videos
-            images.forEach((_, index) => {
-                const video = document.getElementById(`modal-video-${galleryId}-${index}`);
-                if (video) {
-                    video.pause();
-                    video.currentTime = 0;
+            // Pausar y limpiar elemento actual
+            if (currentMediaElement) {
+                if (currentMediaElement.tagName === 'VIDEO') {
+                    currentMediaElement.pause();
+                    currentMediaElement.currentTime = 0;
                 }
-            });
+                currentMediaElement.remove();
+                currentMediaElement = null;
+            }
 
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = '';
         }
 
-        // Función para actualizar contenido del modal
-        function updateModalContent() {
-            if (!images || images.length === 0) return;
-
-            const image = images[currentIndex];
-            if (!image) return;
-
-            // Ocultar todos los elementos primero
-            images.forEach((_, index) => {
-                const img = document.getElementById(`modal-image-${galleryId}-${index}`);
-                const video = document.getElementById(`modal-video-${galleryId}-${index}`);
-
-                if (img) img.style.display = 'none';
-                if (video) {
-                    video.style.display = 'none';
-                    video.pause();
-                }
-            });
-
-            const isVideo = image.src && (image.src.endsWith('.mkv') || image.src.endsWith('.mp4') || image.src.endsWith('.webm'));
-
-            if (isVideo) {
-                // Mostrar video específico
-                const currentVideo = document.getElementById(`modal-video-${galleryId}-${currentIndex}`);
-                if (currentVideo) {
-                    currentVideo.style.display = 'block';
-                    currentVideo.currentTime = 0;
-                    currentVideo.play().catch(() => {
-                        // Error silencioso si no puede reproducir
-                    });
-                }
-            } else {
-                // Mostrar imagen específica
-                const currentImage = document.getElementById(`modal-image-${galleryId}-${currentIndex}`);
-                if (currentImage) {
-                    currentImage.style.display = 'block';
-                }
-            }
-
-            // Actualizar caption y contador
-            modalCaption.textContent = image.caption || '';
-            currentIndexEl.textContent = (currentIndex + 1).toString();
-        }
-
-        // Función para ir a la siguiente imagen
+        // Navegar a siguiente
         function nextImage() {
             if (images.length <= 1) return;
             currentIndex = (currentIndex + 1) % images.length;
             updateModalContent();
         }
 
-        // Función para ir a la imagen anterior
+        // Navegar a anterior
         function prevImage() {
             if (images.length <= 1) return;
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateModalContent();
         }
 
-        // Handlers guardados para limpieza
+        // Event handlers
         const itemHandlers = [];
         const modalClickHandler = (e) => {
             if (e.target === modal) {
@@ -309,48 +335,35 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
             });
         }
 
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeModal);
-        }
-        if (nextBtn) {
-            nextBtn.addEventListener('click', nextImage);
-        }
-        if (prevBtn) {
-            prevBtn.addEventListener('click', prevImage);
-        }
-
-        if (modal) {
-            modal.addEventListener('click', modalClickHandler);
-        }
-
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (nextBtn) nextBtn.addEventListener('click', nextImage);
+        if (prevBtn) prevBtn.addEventListener('click', prevImage);
+        if (modal) modal.addEventListener('click', modalClickHandler);
         document.addEventListener('keydown', keydownHandler);
 
-        // Función de limpieza para remover todos los event listeners
+        // Función de limpieza
         galleryCleanup = () => {
-            // Remover listeners de items de galería
+            // Remover event listeners
             itemHandlers.forEach(({ element, handler }) => {
                 element.removeEventListener('click', handler);
             });
-
-            // Remover listeners de botones
             if (closeBtn) closeBtn.removeEventListener('click', closeModal);
             if (nextBtn) nextBtn.removeEventListener('click', nextImage);
             if (prevBtn) prevBtn.removeEventListener('click', prevImage);
-
-            // Remover listener del modal
             if (modal) modal.removeEventListener('click', modalClickHandler);
-
-            // Remover listener del teclado (CRÍTICO para evitar memory leaks)
             document.removeEventListener('keydown', keydownHandler);
 
-            // Pausar todos los videos
-            images.forEach((_, index) => {
-                const video = document.getElementById(`modal-video-${galleryId}-${index}`);
-                if (video) {
-                    video.pause();
-                    video.currentTime = 0;
+            // Limpiar elemento actual
+            if (currentMediaElement) {
+                if (currentMediaElement.tagName === 'VIDEO') {
+                    currentMediaElement.pause();
                 }
-            });
+                currentMediaElement.remove();
+                currentMediaElement = null;
+            }
+
+            // Limpiar cache de preload
+            preloadCache.clear();
 
             // Cerrar modal si está abierto
             if (modal && !modal.classList.contains('hidden')) {
@@ -363,16 +376,14 @@ const galleryId = projectTitle.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     // Inicializar cuando la página se carga
     document.addEventListener('astro:page-load', () => {
-        // Limpiar instancia anterior si existe
         if (galleryCleanup) {
             galleryCleanup();
             galleryCleanup = null;
         }
-
         initializeGallery();
     });
 
-    // Limpiar antes de navegar a otra página (CRÍTICO para evitar memory leaks)
+    // Limpiar antes de navegar (evitar memory leaks)
     document.addEventListener('astro:before-preparation', () => {
         if (galleryCleanup) {
             galleryCleanup();
