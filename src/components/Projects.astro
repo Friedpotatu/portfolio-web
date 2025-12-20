@@ -28,6 +28,8 @@ const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order);
                     {project.data.image.endsWith('.mkv') || project.data.image.endsWith('.mp4') || project.data.image.endsWith('.webm') ? (
                         <video
                             src={project.data.image}
+                            width="600"
+                            height="338"
                             muted
                             loop
                             playsinline
