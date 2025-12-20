@@ -109,6 +109,8 @@ const { Content, headings } = await render(entry);
                 {project.data.image.endsWith('.mkv') || project.data.image.endsWith('.mp4') || project.data.image.endsWith('.webm') ? (
                     <video
                         src={project.data.image}
+                        width="1200"
+                        height="675"
                         autoplay
                         muted
                         loop
